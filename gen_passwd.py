@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__version__ = "0.3.0"
+__version__ = "0.4.0"
 __author__ = "Igor Martynov (phx.planewalker@gmail.com)"
 
 
@@ -26,12 +26,16 @@ def gen_random_str(length, choose_from = string.ascii_uppercase + string.ascii_l
 
 def print_help():
 	print()
-	print(f"Usage: {os.path.abspath(__file__)} [-C count of password lines] [-L lenght of password] [options]")
+	print(f"Usage: {os.path.abspath(__file__)} [-c count of password lines] [-l lenght of password] [options]")
+	print(f"Alt usage: {os.path.abspath(__file__)} [count of password lines] [lenght of password] [options]")
 	print("		options:")
 	print("		--only-digits: use only digits in passwd")
 	print("		--help | -h: print this help ")
 	print()
-	print(f"Example: {os.path.abspath(__file__)} -C 10 -L 12 		- will generate 10 passwords, 12 chars each")
+	print(f"Example: {os.path.abspath(__file__)} -c 10 -l 12 		- will generate 10 passwords, 12 chars each")
+	print(f"Example: {os.path.abspath(__file__)} 5 15		 	- will generate 5 passwords, 15 chars each")
+	print(f"Example: {os.path.abspath(__file__)} -l 20		 	- will generate 10 passwords, 20 chars each")
+	print(f"Example: {os.path.abspath(__file__)} 100 -l 20		 	- will generate 100 passwords, 20 chars each")
 	print()
 
 
@@ -47,20 +51,25 @@ if __name__ == "__main__":
 	if "--help" in args or "-h" in args:
 		print_help()
 		sys.exit(0)
-	if "-L" in args:
+	if "-l" in args:
 		try:
-			LENGTH = int(args[args.index("-L") + 1])
+			LENGTH = int(args[args.index("-l") + 1])
 		except Exception as e:
 			print(f"ERROR: got error while parsing password length: {e}")
 			print_help()
 			sys.exit(1)
-	if "-C" in args:
+	if "-c" in args:
 		try:
-			LINE_COUNT = int(args[args.index("-C") + 1])
+			LINE_COUNT = int(args[args.index("-c") + 1])
 		except Exception as e:
 			print(f"ERROR: got error while parsing password line count: {e}")
 			print_help()
 			sys.exit(1)
+	if len(args) > 0 and args[0].isdigit():
+		LINE_COUNT = int(args[0])
+	if len(args) > 1 and  args[0].isdigit() and args[1].isdigit():
+		LINE_COUNT = int(args[0])
+		LENGTH = int(args[1])
 	if "--only-digits" in args:
 		CHOOSE_FROM = string.digits
 	else:
